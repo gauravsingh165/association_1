@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_13_054259) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_13_071220) do
+  create_table "accounts", charset: "utf8mb3", force: :cascade do |t|
+    t.string "number"
+    t.bigint "profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["profile_id"], name: "index_accounts_on_profile_id"
+  end
+
   create_table "authors", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -23,6 +31,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_054259) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_books_on_author_id"
+  end
+
+  create_table "groups", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "memberships", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_memberships_on_group_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "posts", charset: "utf8mb3", force: :cascade do |t|
@@ -48,7 +71,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_054259) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "accounts", "profiles"
   add_foreign_key "books", "authors"
+  add_foreign_key "memberships", "groups"
+  add_foreign_key "memberships", "users"
   add_foreign_key "posts", "authors"
   add_foreign_key "profiles", "users"
 end
