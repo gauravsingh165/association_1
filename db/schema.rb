@@ -10,7 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_12_114507) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_13_054259) do
+  create_table "authors", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "books", charset: "utf8mb3", force: :cascade do |t|
+    t.string "title"
+    t.bigint "author_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_books_on_author_id"
+  end
+
+  create_table "posts", charset: "utf8mb3", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.bigint "author_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_posts_on_author_id"
+  end
+
   create_table "profiles", charset: "utf8mb3", force: :cascade do |t|
     t.text "bio"
     t.bigint "user_id", null: false
@@ -25,5 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_12_114507) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "books", "authors"
+  add_foreign_key "posts", "authors"
   add_foreign_key "profiles", "users"
 end
